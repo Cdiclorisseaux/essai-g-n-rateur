@@ -1,111 +1,144 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Critique de livre - Modèle Fenetresur</title>
-  <style>
-    body{font-family:Arial, sans-serif; background:#f7f7f7; margin:0; padding:0;}
-    .container{max-width:900px; margin:20px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
-    h1{text-align:center;}
-    h2{background:#e6f0ff; padding:8px; border-radius:6px;}
-    label{display:block; margin-top:10px; font-weight:bold;}
-    input[type=text], textarea, select{width:100%; padding:8px; margin-top:4px; border:1px solid #ccc; border-radius:4px;}
-    textarea{resize:vertical;}
-    .stars span{font-size:24px; cursor:pointer; color:#ccc;}
-    .stars span.active{color:gold;}
-    button{margin-top:15px; padding:10px 15px; background:#0073e6; color:white; border:none; border-radius:4px; cursor:pointer;}
-    button.secondary{background:#ccc; color:black;}
-    #preview{white-space:pre-wrap; background:#fafafa; padding:10px; border:1px solid #ccc; border-radius:4px; margin-top:10px;}
-    .consignes{margin-top:20px; font-size:14px; background:#f0f8ff; padding:10px; border-radius:6px; border:1px solid #cce0ff;}
-    .consignes ul{margin:6px 0 0 20px;}
-  </style>
+<meta charset="UTF-8">
+<title>Critique de livre</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; }
+label { display: block; margin-top: 10px; font-weight: bold; }
+input, textarea { width: 100%; padding: 5px; margin-top: 3px; }
+textarea { resize: vertical; }
+h1, h2 { color: #333; }
+.stars span {
+  font-size: 24px;
+  cursor: pointer;
+  color: lightgray;
+}
+.stars span.selected {
+  color: gold;
+}
+#result {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  white-space: pre-wrap;
+}
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
 </head>
 <body>
-<div class="container">
-  <h1>Critique de livre</h1>
-  <form id="critForm">
-    <h2>I. Présentation du livre</h2>
-    <label>Titre</label>
-    <input type="text" id="titre">
-    <label>Auteur</label>
-    <input type="text" id="auteur">
-    <label>Type de livre</label>
-    <input type="text" id="type">
-    <label>Genre</label>
-    <input type="text" id="genre">
-    <label>Thème principal</label>
-    <input type="text" id="theme">
-    <label>Résumé (1-2 phrases)</label>
-    <textarea id="resume"></textarea>
 
-    <h2>II. Avis argumenté</h2>
-    <label>Émotion ressentie</label>
-    <input type="text" id="emotion" placeholder="Ex: joie, tristesse...">
-    <label>Note (étoiles)</label>
-    <div class="stars" id="stars">
-      <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
-    </div>
-    <label>Qualificatif de l’histoire</label>
-    <input type="text" id="qualificatif" placeholder="captivante, drôle...">
-    <label>Avis sur l’écriture</label>
-    <input type="text" id="ecriture">
-    <label>Recommandation</label>
-    <input type="text" id="recommandation">
+<h1>Critique de livre</h1>
+<form id="critForm" onsubmit="return false;">
+  <h2>I. Présentation du livre</h2>
+  <label>Titre</label>
+  <input type="text" id="titre">
+  <label>Auteur</label>
+  <input type="text" id="auteur">
+  <label>Éditeur :</label>
+  <input type="text" id="editeur">
+  <label>Type de livre</label>
+  <input type="text" id="type" placeholder="Ex: roman, album, BD...">
+  <label>Genre</label>
+  <input type="text" id="genre" placeholder="Ex: Aventure, policier, guerre, biographie, Science-fiction...">
+  <label>Résumé (1-2 phrases)</label>
+  <textarea id="resume"></textarea>
+  <label>Personnage principal</label>
+  <input type="text" id="personnage">
 
-    <h2>III. Personnalisation</h2>
-    <label>Avis libre / conclusion</label>
-    <textarea id="avisLibre"></textarea>
-
-    <button type="button" id="genBtn">Générer la critique</button>
-    <button type="button" class="secondary" id="copyBtn">Copier</button>
-  </form>
-
-  <h2>Aperçu</h2>
-  <div id="preview"></div>
-
-  <div class="consignes">
-    <strong>Consignes pour relire et améliorer ta critique :</strong>
-    <ul>
-      <li>Vérifie l’orthographe et la ponctuation.</li>
-      <li>Assure-toi que le résumé répond à QUI ? QUOI ? OÙ ? QUAND ? POURQUOI ?</li>
-      <li>Explique pourquoi tu as ressenti cette émotion.</li>
-      <li>Sois précis dans tes avis (personnages, style, originalité).</li>
-      <li>Recommande le livre à un public précis (âge, goûts...).</li>
-    </ul>
+  <h2>II. Avis argumenté</h2>
+  <label>Choix du livre</label>
+  <input type="text" id="choix" placeholder="Ex: couverture, résumé, conseillé par...">
+  <label>Émotion ressentie</label>
+  <input type="text" id="emotion" placeholder="Ex: joie, tristesse, peur, colère...">
+  <label>Note (étoiles)</label>
+  <div class="stars" id="stars">
+    <span data-value="1">★</span>
+    <span data-value="2">★</span>
+    <span data-value="3">★</span>
+    <span data-value="4">★</span>
+    <span data-value="5">★</span>
   </div>
-</div>
+  <label>Qualificatif de l’histoire</label>
+  <input type="text" id="qualificatif" placeholder="captivante, drôle, poétique...">
+  <label>Avis sur l’écriture</label>
+  <input type="text" id="ecriture">
+  <label>Objectif du livre :</label>
+  <input type="text" id="objectif">
+  <label>Recommandation</label>
+  <input type="text" id="recommandation">
+
+  <h2>III. Personnalisation</h2>
+  <label>Avis libre / conclusion</label>
+  <textarea id="avisLibre"></textarea>
+
+  <button onclick="genererTexte()">Générer</button>
+</form>
+
+<h2>Critique générée :</h2>
+<div id="result"></div>
+<button onclick="copierTexte()">Copier le texte</button>
 
 <script>
-  const $ = id => document.getElementById(id);
-  let note = 0;
-  const stars = document.querySelectorAll('.stars span');
-  stars.forEach(s => {
-    s.addEventListener('click', () => {
-      note = parseInt(s.dataset.value);
-      stars.forEach(st => st.classList.toggle('active', parseInt(st.dataset.value) <= note));
-    });
+let note = 0;
+
+// Gestion des étoiles
+document.querySelectorAll('#stars span').forEach(star => {
+  star.addEventListener('click', function() {
+    note = parseInt(this.getAttribute('data-value'));
+    document.querySelectorAll('#stars span').forEach(s => s.classList.remove('selected'));
+    for (let i = 0; i < note; i++) {
+      document.querySelectorAll('#stars span')[i].classList.add('selected');
+    }
   });
+});
 
-  function buildCritique(){
-    const resume = $('resume').value.trim();
-    let resumeCorrige = resume.charAt(0).toUpperCase() + resume.slice(1);
-    if (resumeCorrige && !resumeCorrige.endsWith('.')) resumeCorrige += '.';
+function genererTexte() {
+  const titre = document.getElementById('titre').value.trim();
+  const auteur = document.getElementById('auteur').value.trim();
+  const editeur = document.getElementById('editeur').value.trim();
+  const type = document.getElementById('type').value.trim();
+  const genre = document.getElementById('genre').value.trim();
+  const resume = document.getElementById('resume').value.trim();
+  const personnage = document.getElementById('personnage').value.trim();
+  const choix = document.getElementById('choix').value.trim();
+  const emotion = document.getElementById('emotion').value.trim();
+  const qualificatif = document.getElementById('qualificatif').value.trim();
+  const ecriture = document.getElementById('ecriture').value.trim();
+  const objectif = document.getElementById('objectif').value.trim();
+  const recommandation = document.getElementById('recommandation').value.trim();
+  const avisLibre = document.getElementById('avisLibre').value.trim();
 
-    return `Voici une critique littéraire :\n\n« ${$('titre').value} », écrit par ${$('auteur').value}, est un ${$('type').value.toLowerCase()} ${$('genre').value.toLowerCase()} qui aborde avec finesse le thème de ${$('theme').value.toLowerCase()}. ${resumeCorrige}\n\nCe récit ${$('qualificatif').value} m’a particulièrement marqué par la manière dont il suscite ${$('emotion').value}. L’écriture ${$('ecriture').value} renforce l’impact de l’histoire, offrant au lecteur une immersion complète. Je lui attribue la note de ${note}/5.\n\nEn conclusion, ${$('avisLibre').value} Je recommande ce livre ${$('recommandation').value}.`;
-  }
+  let texte = `J'ai lu "${titre}" écrit par ${auteur} et publié par ${editeur}. `;
+  texte += `C'est un ${type} appartenant au genre ${genre}. `;
+  texte += `Voici un bref résumé : ${resume} `;
+  texte += `Le personnage principal est ${personnage}.\n\n`;
 
-  $('genBtn').addEventListener('click', (e) => {
-    e.preventDefault();
-    $('preview').textContent = buildCritique();
+  texte += `J'ai choisi ce livre car ${choix}. `;
+  texte += `Pendant ma lecture, j'ai ressenti ${emotion}. `;
+  texte += `Je lui attribue la note de ${note} étoile(s). `;
+  texte += `L’histoire est ${qualificatif} et l'écriture est ${ecriture}. `;
+  texte += `L'objectif de ce livre est ${objectif}. `;
+  texte += `Je le recommande à ${recommandation}.\n\n`;
+
+  texte += `${avisLibre}`;
+
+  document.getElementById('result').innerText = texte;
+}
+
+function copierTexte() {
+  const texte = document.getElementById('result').innerText;
+  navigator.clipboard.writeText(texte).then(() => {
+    alert("Texte copié !");
   });
-
-  $('copyBtn').addEventListener('click', (e) => {
-    e.preventDefault();
-    navigator.clipboard.writeText(buildCritique()).then(() => {
-      alert('Critique copiée !');
-    });
-  });
+}
 </script>
+
 </body>
 </html>
