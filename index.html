@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Générateur de critique littéraire</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    label { font-weight: bold; margin-top: 10px; display: block; }
+    textarea, input, select { width: 100%; padding: 5px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px 15px; }
+    #resultat { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+
+<h1>Générateur de critique littéraire</h1>
+
+<form id="critiqueForm" onsubmit="return false;">
+    <label>Titre du livre :</label>
+    <input type="text" id="titre">
+
+    <label>Type de livre :</label>
+    <select id="type">
+        <option>Roman</option>
+        <option>BD</option>
+        <option>Manga</option>
+        <option>Documentaire</option>
+    </select>
+
+    <label>Genre du livre :</label>
+    <input type="text" id="genre">
+
+    <label>Auteur :</label>
+    <input type="text" id="auteur">
+
+    <label>Éditeur :</label>
+    <input type="text" id="editeur">
+
+    <label>Thème du livre :</label>
+    <input type="text" id="theme">
+
+    <label>Résumé :</label>
+    <textarea id="resume"></textarea>
+
+    <label>Ce qui m'a donné envie de lire le livre :</label>
+    <input type="text" id="envie">
+
+    <label>Ce que j'ai ressenti pendant et après la lecture :</label>
+    <textarea id="emotions"></textarea>
+
+    <label>Mon avis sur le livre (étoiles) :</label>
+    <select id="etoiles">
+        <option>⭐</option>
+        <option>⭐⭐</option>
+        <option>⭐⭐⭐</option>
+        <option>⭐⭐⭐⭐</option>
+        <option>⭐⭐⭐⭐⭐</option>
+    </select>
+
+    <label>Mon avis sur les personnages :</label>
+    <textarea id="personnages"></textarea>
+
+    <label>Mon avis sur le style et l'écriture :</label>
+    <textarea id="style"></textarea>
+
+    <label>À qui je conseille ce livre :</label>
+    <input type="text" id="conseil">
+
+    <label>Objectif du livre :</label>
+    <input type="text" id="objectif">
+
+    <button type="button" onclick="genererCritique()">Générer</button>
+</form>
+
+<h2>Critique générée</h2>
+<div id="resultat"></div>
+
+<script>
+function genererCritique() {
+    let titre = document.getElementById("titre").value.trim();
+    let type = document.getElementById("type").value;
+    let genre = document.getElementById("genre").value.trim();
+    let auteur = document.getElementById("auteur").value.trim();
+    let editeur = document.getElementById("editeur").value.trim();
+    let theme = document.getElementById("theme").value.trim();
+    let resume = document.getElementById("resume").value.trim();
+    let envie = document.getElementById("envie").value.trim();
+    let emotions = document.getElementById("emotions").value.trim();
+    let etoiles = document.getElementById("etoiles").value;
+    let personnages = document.getElementById("personnages").value.trim();
+    let style = document.getElementById("style").value.trim();
+    let conseil = document.getElementById("conseil").value.trim();
+    let objectif = document.getElementById("objectif").value.trim();
+
+    let critique = `J’ai lu "${titre}", un ${type.toLowerCase()} de genre ${genre}, écrit par ${auteur} et publié par ${editeur}. 
+Ce livre aborde le thème suivant : ${theme}. Voici un résumé : ${resume}.
+
+J’ai choisi de lire ce livre car ${envie}. Pendant et après ma lecture, j’ai ressenti ${emotions}. 
+Je lui attribue la note suivante : ${etoiles}. Concernant les personnages, ${personnages}. 
+Le style et l’écriture sont ${style}. 
+
+Je conseille ce livre à ${conseil}. L’objectif de ce livre est ${objectif}.`;
+
+    document.getElementById("resultat").textContent = critique;
+}
+</script>
+
+</body>
+</html>
