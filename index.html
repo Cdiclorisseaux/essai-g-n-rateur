@@ -1,109 +1,111 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Générateur de critique littéraire</title>
-<style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    label { font-weight: bold; margin-top: 10px; display: block; }
-    textarea, input, select { width: 100%; padding: 5px; margin-top: 5px; }
-    button { margin-top: 15px; padding: 10px 15px; }
-    #resultat { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; white-space: pre-wrap; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Critique de livre - Modèle Fenetresur</title>
+  <style>
+    body{font-family:Arial, sans-serif; background:#f7f7f7; margin:0; padding:0;}
+    .container{max-width:900px; margin:20px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+    h1{text-align:center;}
+    h2{background:#e6f0ff; padding:8px; border-radius:6px;}
+    label{display:block; margin-top:10px; font-weight:bold;}
+    input[type=text], textarea, select{width:100%; padding:8px; margin-top:4px; border:1px solid #ccc; border-radius:4px;}
+    textarea{resize:vertical;}
+    .stars span{font-size:24px; cursor:pointer; color:#ccc;}
+    .stars span.active{color:gold;}
+    button{margin-top:15px; padding:10px 15px; background:#0073e6; color:white; border:none; border-radius:4px; cursor:pointer;}
+    button.secondary{background:#ccc; color:black;}
+    #preview{white-space:pre-wrap; background:#fafafa; padding:10px; border:1px solid #ccc; border-radius:4px; margin-top:10px;}
+    .consignes{margin-top:20px; font-size:14px; background:#f0f8ff; padding:10px; border-radius:6px; border:1px solid #cce0ff;}
+    .consignes ul{margin:6px 0 0 20px;}
+  </style>
 </head>
 <body>
-
-<h1>Générateur de critique littéraire</h1>
-
-<form id="critiqueForm" onsubmit="return false;">
-    <label>Titre du livre :</label>
+<div class="container">
+  <h1>Critique de livre</h1>
+  <form id="critForm">
+    <h2>I. Présentation du livre</h2>
+    <label>Titre</label>
     <input type="text" id="titre">
-
-    <label>Type de livre :</label>
-    <select id="type">
-        <option>Roman</option>
-        <option>BD</option>
-        <option>Manga</option>
-        <option>Documentaire</option>
-    </select>
-
-    <label>Genre du livre :</label>
-    <input type="text" id="genre">
-
-    <label>Auteur :</label>
+    <label>Auteur</label>
     <input type="text" id="auteur">
-
-    <label>Éditeur :</label>
-    <input type="text" id="editeur">
-
-    <label>Thème du livre :</label>
+    <label>Type de livre</label>
+    <input type="text" id="type">
+    <label>Genre</label>
+    <input type="text" id="genre">
+    <label>Thème principal</label>
     <input type="text" id="theme">
-
-    <label>Résumé :</label>
+    <label>Résumé (1-2 phrases)</label>
     <textarea id="resume"></textarea>
 
-    <label>Ce qui m'a donné envie de lire le livre :</label>
-    <input type="text" id="envie">
+    <h2>II. Avis argumenté</h2>
+    <label>Émotion ressentie</label>
+    <input type="text" id="emotion" placeholder="Ex: joie, tristesse...">
+    <label>Note (étoiles)</label>
+    <div class="stars" id="stars">
+      <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+    </div>
+    <label>Qualificatif de l’histoire</label>
+    <input type="text" id="qualificatif" placeholder="captivante, drôle...">
+    <label>Avis sur l’écriture</label>
+    <input type="text" id="ecriture">
+    <label>Recommandation</label>
+    <input type="text" id="recommandation">
 
-    <label>Ce que j'ai ressenti pendant et après la lecture :</label>
-    <textarea id="emotions"></textarea>
+    <h2>III. Personnalisation</h2>
+    <label>Avis libre / conclusion</label>
+    <textarea id="avisLibre"></textarea>
 
-    <label>Mon avis sur le livre (étoiles) :</label>
-    <select id="etoiles">
-        <option>⭐</option>
-        <option>⭐⭐</option>
-        <option>⭐⭐⭐</option>
-        <option>⭐⭐⭐⭐</option>
-        <option>⭐⭐⭐⭐⭐</option>
-    </select>
+    <button type="button" id="genBtn">Générer la critique</button>
+    <button type="button" class="secondary" id="copyBtn">Copier</button>
+  </form>
 
-    <label>Mon avis sur les personnages :</label>
-    <textarea id="personnages"></textarea>
+  <h2>Aperçu</h2>
+  <div id="preview"></div>
 
-    <label>Mon avis sur le style et l'écriture :</label>
-    <textarea id="style"></textarea>
-
-    <label>À qui je conseille ce livre :</label>
-    <input type="text" id="conseil">
-
-    <label>Objectif du livre :</label>
-    <input type="text" id="objectif">
-
-    <button type="button" onclick="genererCritique()">Générer</button>
-</form>
-
-<h2>Critique générée</h2>
-<div id="resultat"></div>
+  <div class="consignes">
+    <strong>Consignes pour relire et améliorer ta critique :</strong>
+    <ul>
+      <li>Vérifie l’orthographe et la ponctuation.</li>
+      <li>Assure-toi que le résumé répond à QUI ? QUOI ? OÙ ? QUAND ? POURQUOI ?</li>
+      <li>Explique pourquoi tu as ressenti cette émotion.</li>
+      <li>Sois précis dans tes avis (personnages, style, originalité).</li>
+      <li>Recommande le livre à un public précis (âge, goûts...).</li>
+    </ul>
+  </div>
+</div>
 
 <script>
-function genererCritique() {
-    let titre = document.getElementById("titre").value.trim();
-    let type = document.getElementById("type").value;
-    let genre = document.getElementById("genre").value.trim();
-    let auteur = document.getElementById("auteur").value.trim();
-    let editeur = document.getElementById("editeur").value.trim();
-    let theme = document.getElementById("theme").value.trim();
-    let resume = document.getElementById("resume").value.trim();
-    let envie = document.getElementById("envie").value.trim();
-    let emotions = document.getElementById("emotions").value.trim();
-    let etoiles = document.getElementById("etoiles").value;
-    let personnages = document.getElementById("personnages").value.trim();
-    let style = document.getElementById("style").value.trim();
-    let conseil = document.getElementById("conseil").value.trim();
-    let objectif = document.getElementById("objectif").value.trim();
+  const $ = id => document.getElementById(id);
+  let note = 0;
+  const stars = document.querySelectorAll('.stars span');
+  stars.forEach(s => {
+    s.addEventListener('click', () => {
+      note = parseInt(s.dataset.value);
+      stars.forEach(st => st.classList.toggle('active', parseInt(st.dataset.value) <= note));
+    });
+  });
 
-    let critique = `J’ai lu "${titre}", un ${type.toLowerCase()} de genre ${genre}, écrit par ${auteur} et publié par ${editeur}. 
-Ce livre aborde le thème suivant : ${theme}. Voici un résumé : ${resume}.
+  function buildCritique(){
+    const resume = $('resume').value.trim();
+    let resumeCorrige = resume.charAt(0).toUpperCase() + resume.slice(1);
+    if (resumeCorrige && !resumeCorrige.endsWith('.')) resumeCorrige += '.';
 
-J’ai choisi de lire ce livre car ${envie}. Pendant et après ma lecture, j’ai ressenti ${emotions}. 
-Je lui attribue la note suivante : ${etoiles}. Concernant les personnages, ${personnages}. 
-Le style et l’écriture sont ${style}. 
+    return `Voici une critique littéraire :\n\n« ${$('titre').value} », écrit par ${$('auteur').value}, est un ${$('type').value.toLowerCase()} ${$('genre').value.toLowerCase()} qui aborde avec finesse le thème de ${$('theme').value.toLowerCase()}. ${resumeCorrige}\n\nCe récit ${$('qualificatif').value} m’a particulièrement marqué par la manière dont il suscite ${$('emotion').value}. L’écriture ${$('ecriture').value} renforce l’impact de l’histoire, offrant au lecteur une immersion complète. Je lui attribue la note de ${note}/5.\n\nEn conclusion, ${$('avisLibre').value} Je recommande ce livre ${$('recommandation').value}.`;
+  }
 
-Je conseille ce livre à ${conseil}. L’objectif de ce livre est ${objectif}.`;
+  $('genBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    $('preview').textContent = buildCritique();
+  });
 
-    document.getElementById("resultat").textContent = critique;
-}
+  $('copyBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    navigator.clipboard.writeText(buildCritique()).then(() => {
+      alert('Critique copiée !');
+    });
+  });
 </script>
-
 </body>
 </html>
