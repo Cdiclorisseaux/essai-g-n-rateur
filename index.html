@@ -47,14 +47,14 @@ button {
   <input type="text" id="type" placeholder="Ex: roman, album, BD...">
   <label>Genre</label>
   <input type="text" id="genre" placeholder="Ex: Aventure, policier, guerre, biographie, Science-fiction...">
-  <label>Résumé (1-2 phrases en commençant par C'est l'histoire de...)</label>
+  <label>Résumé (1-2 phrases : C'est l'histoire de...)</label>
   <textarea id="resume"></textarea>
-  <label>Personnage principal</label>
+  <label>Nom personnage principal et descriptif</label>
   <input type="text" id="personnage">
 
   <h2>II. Avis argumenté</h2>
   <label>Choix du livre</label>
-  <input type="text" id="choix" placeholder="Ex: couverture, résumé, conseillé par...">
+  <input type="text" id="choix" placeholder="Ex: parce que...">
   <label>Émotion ressentie</label>
   <input type="text" id="emotion" placeholder="Ex: la joie, la tristesse, la peur, la colère...">
   <label>Note (étoiles)</label>
@@ -68,7 +68,7 @@ button {
   <label>Qualificatif de l’histoire</label>
   <input type="text" id="qualificatif" placeholder="captivante, drôle, poétique...">
   <label>Avis sur l’écriture</label>
-  <input type="text" id="ecriture">
+  <input type="text" id="ecriture" placeholder="fluide, vive, écrit à la première personne...>
   <label>Objectif du livre :</label>
   <input type="text" id="objectif" placeholder="l'objectif est de...">
   <label>Recommandation</label>
@@ -120,7 +120,7 @@ function genererTexte() {
   texte += `C'est l'histoire de ${resume} `;
   texte += `Le personnage principal s'appelle ${personnage}.\n\n`;
 
-  texte += `J'ai choisi ce livre car ${choix}. `;
+  texte += `J'ai choisi ce livre ${choix}. `;
   texte += `L’histoire est ${qualificatif} et l'écriture est ${ecriture}. `;
   texte += `L'objectif de ce livre est de ${objectif}. `;
   texte += `Pendant ma lecture, j'ai ressenti de ${emotion}. `;
