@@ -1,142 +1,87 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Critique de livre</title>
+<title>Générateur de critique — CDI</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; }
-label { display: block; margin-top: 10px; font-weight: bold; }
-input, textarea { width: 100%; padding: 5px; margin-top: 3px; }
-textarea { resize: vertical; }
-h1, h2 { color: #333; }
-.stars span {
-  font-size: 24px;
-  cursor: pointer;
-  color: lightgray;
-}
-.stars span.selected {
-  color: gold;
-}
-#result {
-  margin-top: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background: #f9f9f9;
-  white-space: pre-wrap;
-}
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  h1, h2 { color: #333; }
+  label { font-weight: bold; margin-top: 10px; display: block; }
+  input, textarea, select { width: 100%; padding: 6px; margin-top: 4px; }
+  button { margin-top: 15px; padding: 10px 15px; }
+  #resultat { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; white-space: pre-wrap; }
 </style>
 </head>
 <body>
 
 <h1>Critique de livre</h1>
-<form id="critForm" onsubmit="return false;">
-  <h2>I. Présentation du livre</h2>
-  <label>Titre</label>
-  <input type="text" id="titre">
-  <label>Auteur</label>
-  <input type="text" id="auteur">
-  <label>Éditeur :</label>
-  <input type="text" id="editeur">
-  <label>Type de livre</label>
-  <input type="text" id="type" placeholder="Ex: roman, album, BD...">
-  <label>Thème principal</label>
-  <input type="text" id="thème" placeholder="Ex: l'aventure, le policier, la guerre, le harcèlement, la Science-fiction...">
-  <label>Résumé en 1-2 phrases avec QQCOQP</label>
-  <textarea id="resume"></textarea>
-  <label>Nom du personnage principal.1-2 phrases pour le décrire</label>
-  <input type="text" id="personnage">
 
-  <h2>II. Avis argumenté</h2>
-  <label>J'ai choisi ce livre parce que...</label>
-  <input type="text" id="choix">
-  <label>Émotion ressentie</label>
-  <input type="text" id="emotion" placeholder="Ex: la joie, la tristesse, la peur, la colère...">
-  <label>Note (étoiles)</label>
-  <div class="stars" id="stars">
-    <span data-value="1">★</span>
-    <span data-value="2">★</span>
-    <span data-value="3">★</span>
-    <span data-value="4">★</span>
-    <span data-value="5">★</span>
-  </div>
-  <label>L'histoire est...</label>
-  <input type="text" id="qualificatif" placeholder="captivante, drôle, poétique...">
-  <label>Je trouve que l'écriture est...</label>
-  <input type="text" id="ecriture" placeholder="fluide, vive, écrit à la première personne...">
-  <label>L'objectif du livre est de...</label>
-  <input type="text" id="objectif">
-  <label>Je recommande ce livre à...</label>
-  <input type="text" id="recommandation">
+<h2>I. Présentation du livre</h2>
+<label>Titre :</label><input type="text" id="titre">
+<label>Auteur :</label><input type="text" id="auteur">
+<label>Éditeur :</label><input type="text" id="editeur">
+<label>Type de livre :</label><input type="text" id="type">
+<label>Genre :</label><input type="text" id="genre">
+<label>Résumé (1-2 phrases) :</label><textarea id="resume"></textarea>
 
-  <h2>III. Personnalisation</h2>
-  <label>Tu peux en dire plus</label>
-  <textarea id="avisLibre"></textarea>
+<h2>II. Avis argumenté</h2>
+<label>Ce qui m’a donné envie de lire :</label><input type="text" id="envie">
+<label>Émotion ressentie :</label><input type="text" id="emotion">
+<label>Note (étoiles) :</label>
+<select id="etoiles">
+  <option>★☆☆☆☆</option>
+  <option>★★☆☆☆</option>
+  <option>★★★☆☆</option>
+  <option>★★★★☆</option>
+  <option>★★★★★</option>
+</select>
+<label>Qualificatif de l’histoire :</label><input type="text" id="qualificatif">
+<label>Avis sur l’écriture :</label><input type="text" id="ecriture">
+<label>Objectif du livre :</label><input type="text" id="objectif">
+<label>Recommandation :</label><input type="text" id="recommandation">
 
-  <button onclick="genererTexte()">Générer</button>
-</form>
+<h2>III. Personnalisation</h2>
+<label>Avis libre / conclusion :</label><textarea id="avisLibre"></textarea>
 
-<h2>Critique générée :</h2>
-<div id="result"></div>
-<button onclick="copierTexte()">Copier le texte</button>
+<button type="button" id="genBtn">Générer</button>
+
+<h2>Critique générée</h2>
+<div id="resultat"></div>
 
 <script>
-let note = 0;
+function sentence(s) {
+  const t = (s || '').trim();
+  if (!t) return '';
+  let out = t.charAt(0).toUpperCase() + t.slice(1);
+  if (!/[.!?…]$/.test(out)) out += '.';
+  return out + ' ';
+}
 
-// Gestion des étoiles
-document.querySelectorAll('#stars span').forEach(star => {
-  star.addEventListener('click', function() {
-    note = parseInt(this.getAttribute('data-value'));
-    document.querySelectorAll('#stars span').forEach(s => s.classList.remove('selected'));
-    for (let i = 0; i < note; i++) {
-      document.querySelectorAll('#stars span')[i].classList.add('selected');
-    }
-  });
+document.getElementById('genBtn').addEventListener('click', () => {
+  const fields = ['titre','auteur','editeur','type','genre','resume','envie','emotion','etoiles','qualificatif','ecriture','objectif','recommandation','avisLibre'];
+  const v = {};
+  fields.forEach(f => v[f] = document.getElementById(f).value.trim());
+
+  let text = '';
+  if (v.titre) text += `« ${v.titre} »`;
+  if (v.type) text += ` est un ${v.type.toLowerCase()}`;
+  if (v.genre) text += ` de genre ${v.genre.toLowerCase()}`;
+  if (v.auteur) text += `, écrit par ${v.auteur}`;
+  if (v.editeur) text += `, publié chez ${v.editeur}`;
+  text += '. ';
+  if (v.resume) text += sentence(v.resume);
+
+  if (v.envie) text += `J’ai choisi ce livre car ${v.envie.toLowerCase()}. `;
+  if (v.emotion) text += `Pendant et après ma lecture, j’ai ressenti ${v.emotion.toLowerCase()}. `;
+  if (v.etoiles) text += `Note : ${v.etoiles}. `;
+  if (v.qualificatif) text += sentence(v.qualificatif);
+  if (v.ecriture) text += `Le style est ${v.ecriture.toLowerCase()}. `;
+  if (v.objectif) text += `L’objectif est ${v.objectif.toLowerCase()}. `;
+  if (v.recommandation) text += `${v.recommandation}. `;
+  if (v.avisLibre) text += sentence(v.avisLibre);
+
+  document.getElementById('resultat').textContent = text.trim();
 });
-
-function genererTexte() {
-  const titre = document.getElementById('titre').value.trim();
-  const auteur = document.getElementById('auteur').value.trim();
-  const editeur = document.getElementById('editeur').value.trim();
-  const type = document.getElementById('type').value.trim();
-  const genre = document.getElementById('genre').value.trim();
-  const resume = document.getElementById('resume').value.trim();
-  const personnage = document.getElementById('personnage').value.trim();
-  const choix = document.getElementById('choix').value.trim();
-  const emotion = document.getElementById('emotion').value.trim();
-  const qualificatif = document.getElementById('qualificatif').value.trim();
-  const ecriture = document.getElementById('ecriture').value.trim();
-  const objectif = document.getElementById('objectif').value.trim();
-  const recommandation = document.getElementById('recommandation').value.trim();
-  const avisLibre = document.getElementById('avisLibre').value.trim();
-
-  let texte = `J'ai lu "${titre}" écrit par ${auteur} et publié par ${editeur}. `;
-  texte += `C'est un ${type} dont le thème principal est ${genre}. `;
-  texte += ` ${resume} `;
-  texte += `Le personnage principal s'appelle ${personnage}.\n\n`;
-
-  texte += `J'ai choisi ce livre parce que ${choix}. `;
-  texte += `L’histoire est ${qualificatif} et l'écriture est ${ecriture}. `;
-  texte += `L'objectif de ce livre est de ${objectif}. `;
-  texte += `Pendant ma lecture, j'ai ressenti de ${emotion}. `;
-  texte += `C'est un livre que je recommande à ${recommandation}.\n\n`;
-  texte += `Je lui attribue la note de ${note} étoile(s). `;
-  texte += `${avisLibre}`;
-
-  document.getElementById('result').innerText = texte;
-}
-
-function copierTexte() {
-  const texte = document.getElementById('result').innerText;
-  navigator.clipboard.writeText(texte).then(() => {
-    alert("Texte copié !");
-  });
-}
 </script>
 
 </body>
